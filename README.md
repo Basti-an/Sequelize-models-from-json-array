@@ -9,7 +9,7 @@ Writing a Sequelize model by Hand for that amount of fields would be an incredib
 This (very) small program tries to help by looking at your JSON objects (simple .json file containing an array of objects) and subsequently creates the Sequelize Models for you automatically!
 
 ## Setup
-To setup the project, simply clone it into a clean directory, run `npm i` or `yarn` to install the only external dependency ESLint (used for cleaning up the generated model file) and you are done :) You can verify that everythign worked properly by running `npm run test` and taking a look at the files in the freshly generated models folder.
+`npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
 
 ## Creating Models
 In order to run the program, you need to supply at least a model name and a filepath to your JSON file as command line arguments.
