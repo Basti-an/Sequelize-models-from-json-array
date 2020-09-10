@@ -1,0 +1,21 @@
+{
+  "name": "generateSequelizeModelFromJsonArray",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "format": "eslint ./models --fix",
+    "test": "node index cars ./examples/cars.json ./examples/people.json ./examples/pokemon.json ./examples/narcosEpisodes.json"
+  },
+  "author": "Sebastian Wiendlocha",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^6.8.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-import": "^2.20.2"
+  }
+}
