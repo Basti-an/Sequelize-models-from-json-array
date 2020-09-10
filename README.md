@@ -1,5 +1,5 @@
-# sequelize-model-from-json-array
-Create Sequelize model files from JSON files containing examples of instances of the desired models. 
+# Create Sequelize Models from JSON-Array
+Creates Sequelize model files from JSON files containing examples of instances of the desired models. 
 Field names and types of the sequelize models will be inferred from the JSON input.
 
 To see in action what this does exactly, setup the project, take a look at the json files in the examples folder and run `npm run test` 🚀
