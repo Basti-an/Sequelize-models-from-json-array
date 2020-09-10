@@ -25,7 +25,7 @@ const printCurrentState = (
 
   // bomb explosion
   process.stdout.write(
-    progress % length == 0 ? `${endCharLast}  ` : `${endCharNormal}  `,
+    progress % length == 0 ? `_${endCharLast}  ` : `${endCharNormal}  `,
   );
 
   if (progress % length != 0) {
