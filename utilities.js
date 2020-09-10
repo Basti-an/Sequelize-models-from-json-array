@@ -18,7 +18,7 @@ function toCamelCase(key) {
   camel = camel.replace(/-(.)/g, (m, c) => c.toUpperCase());
 
   // lowercase first char
-  // this throws index error if key is an empty string, which is ok for this our use case for now
+  // this throws index error if key is an empty string, which is ok for our use case
   camel = camel[0].toLowerCase() + camel.slice(1);
 
   return camel;

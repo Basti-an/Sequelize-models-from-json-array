@@ -1,18 +1,19 @@
-# sequelize-model-from-json-array
-Create Sequelize models for NodeJS (.js) from JSON files containing examples of your models. Field names and types of the sequelize models will be inferred from the JSON input.
+# Create Sequelize Models from JSON-Array
+Creates Sequelize model files from JSON files containing examples of instances of the desired models. 
+Field names and types of the sequelize models will be inferred from the JSON input.
 
 To see in action what this does exactly, setup the project, take a look at the json files in the examples folder and run `npm run test` 🚀
 
 ## Why?
 Sometimes you have to import data from a new JSON API to your database and find out that the returned objects contain hundreds of fields.
 Writing a Sequelize model by Hand for that amount of fields would be an incredible waste of time - 
-this small project tries to help by looking at examples (simple .json file containing an array of objects) and subsequently create the Sequelize Models for you automatically!
+This (very) small program tries to help by looking at your JSON objects (simple .json file containing an array of objects) and subsequently creates the Sequelize Models for you automatically!
 
 ## Setup
-To setup the project, simply clone it into a clean directory, run `npm i` or `yarn` to install the only external dependency ESLint (used for cleaning up the generated model file)
+`npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
 
 ## Creating Models
-In order to run the program, you need to supply at least a model name and a filepath to your JSON file containing the examples used for inferring data types.
+In order to run the program, you need to supply at least a model name and a filepath to your JSON file as command line arguments.
 You can also supply more than one JSON file, but the name for those models will be inferred from the JSON file name in that case.
 
 ### simple example:
@@ -23,7 +24,10 @@ You can also supply more than one JSON file, but the name for those models will 
 
 ## Limitations
 Currently the program cannot handle nested values - these would require creating multiple models and their associations
-I'm going to implement simple 1:1 and 1:N associations in the near future.
+
+## TODOS
+* implement 1:1 and 1:N associations by generating multiple models per input file
+* implement support for wildcard paths ("./examples/*")
 
 ## Shoutouts:
 * Biuni/PokemonGO-Pokedex for pokemon dataset
