@@ -1,6 +1,8 @@
 # sequelize-model-from-json-array
 Create Sequelize models for NodeJS (.js) from JSON files containing examples of your models. Field names and types of the sequelize models will be inferred from the JSON input.
 
+To see in action what this does exactly, setup the project, take a look at the json files in the examples folder and run `npm run test` 🚀
+
 ## Why?
 Sometimes you have to import data from a new JSON API to your database and find out that the returned objects contain hundreds of fields.
 Writing a Sequelize model by Hand for that amount of fields would be an incredible waste of time - 
