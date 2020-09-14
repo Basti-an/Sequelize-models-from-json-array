@@ -10,7 +10,7 @@ Writing the sequelize models and their associations by hand would be a bad way t
 This small program tries to help you out by looking at your JSON objects and subsequently creates the Sequelize Models and their associations for you automatically!
 
 ## Setup 🧶
-`npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
+`npm i` followed by `npm run test` or use `yarn` alternatively.
 
 ## Creating Models 🌱
 In order to run the program, you need to supply at least a model name and a filepath to your JSON file as command line arguments.
