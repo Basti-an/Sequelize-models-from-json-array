@@ -7,16 +7,13 @@ const sequelize = "<YOUR_SEQUELIZE_CONNECTION_GOES_HERE>";
 // model relations go here
 {{relations}}
 
-// Location.belongsTo(Operator, {
-//   as: "operator",
-//   foreignKey: "operator_id",
-//   targetKey: "operator_id",
-// });
-// Operator.hasMany(Location, {
-//   as: "locations",
-//   foreignKey: "operator_id",
-//   targetKey: "operator_id",
-// });
+// 1:n
+// testModel.belongsTo(otherModel);
+// otherModel.hasMany(testModel);
+
+// 1:1
+// testModel.belongsTo(otherModel);
+// otherModel.hasOne(testModel);
 
 const models = {
    {{modelNames}}
