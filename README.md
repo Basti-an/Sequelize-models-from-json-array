@@ -17,7 +17,7 @@ In order to run the program, you need to supply at least a model name and a file
 You can also supply more than one JSON file, but the name for those models will be inferred from the JSON file name in that case.
 
 ### simple example:
-`npm run start pokedex ./examples/kantoPokedex.json`
+`node index pokedex ./examples/kantoPokedex.json`
 
 ### example with multiple filenames:
 `node index people ./examples/people.json ./examples/narcosEpisodes.json`
