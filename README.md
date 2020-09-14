@@ -1,13 +1,13 @@
 # Create Sequelize Models from JSON-Array
-Creates Sequelize model files from JSON files containing examples of instances of the desired models. 
+Creates Sequelize model files from JSON files containing example instances of the desired models. 
 Field names and types of the sequelize models will be inferred from the JSON input.
 
-To see in action what this does exactly, setup the project, take a look at the json files in the examples folder and run `npm run test` 🚀
+To see in action what this does exactly, setup the project, take a look at the kantoPokedex.json file in the examples folder and run `npm run test` 🚀
 
 ## Why?
 Sometimes you have to import data from a new JSON API to your database and find out that the returned objects contain hundreds of fields.
-Writing a Sequelize model by Hand for that amount of fields would be an incredible waste of time - 
-This (very) small program tries to help by looking at your JSON objects (simple .json file containing an array of objects) and subsequently creates the Sequelize Models for you automatically! Just Pop in your Sequelize connection / config into the generated ./models/index.js files and you should be ready to go (don't forget to sequelize.sync ofc)!
+Writing the sequelize models and their associations by hand would be a bad way to spend your time.
+This small program tries to help you out by looking at your JSON objects and subsequently creates the Sequelize Models and their associations for you automatically!
 
 ## Setup
 `npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
@@ -17,18 +17,14 @@ In order to run the program, you need to supply at least a model name and a file
 You can also supply more than one JSON file, but the name for those models will be inferred from the JSON file name in that case.
 
 ### simple example:
-`npm run start pokedex ./examples/pokemon.json`
+`npm run start pokedex ./examples/kantoPokedex.json`
 
 ### example with multiple filenames:
-`node index pokedex ./examples/pokemon.json ./examples/people.json ./examples/narcosEpisodes.json`
-
-## Limitations
-Currently the program cannot handle nested values - these would require creating multiple models and their associations
+`node index people ./examples/people.json ./examples/narcosEpisodes.json`
 
 ## TODOS
-* implement 1:1 and 1:N associations nested deeper than one level
-* implement support for wildcard paths ("./examples/*")
+* implement support for wildcard paths ("./examples/*") and named command line arguments
 
 ## Shoutouts:
-* Biuni/PokemonGO-Pokedex for pokemon dataset
-* pixelastic/fakeusers for people dataset
+* [https://pokeapi.co/](PokeAPI) for amazing pokemon dataset
+* [https://github.com/pixelastic/fakeusers](pixelastic/fakeusers) for people dataset
