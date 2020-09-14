@@ -7,7 +7,7 @@ To see in action what this does exactly, setup the project, take a look at the j
 ## Why?
 Sometimes you have to import data from a new JSON API to your database and find out that the returned objects contain hundreds of fields.
 Writing a Sequelize model by Hand for that amount of fields would be an incredible waste of time - 
-This (very) small program tries to help by looking at your JSON objects (simple .json file containing an array of objects) and subsequently creates the Sequelize Models for you automatically!
+This (very) small program tries to help by looking at your JSON objects (simple .json file containing an array of objects) and subsequently creates the Sequelize Models for you automatically! Just Pop in your Sequelize connection / config into the generated ./models/index.js files and you should be ready to go (don't forget to sequelize.sync ofc)!
 
 ## Setup
 `npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
@@ -20,13 +20,13 @@ You can also supply more than one JSON file, but the name for those models will 
 `npm run start pokedex ./examples/pokemon.json`
 
 ### example with multiple filenames:
-`node index cars ./examples/cars.json ./examples/people.json ./examples/pokemon.json ./examples/narcosEpisodes.json`
+`node index pokedex ./examples/pokemon.json ./examples/people.json ./examples/narcosEpisodes.json`
 
 ## Limitations
 Currently the program cannot handle nested values - these would require creating multiple models and their associations
 
 ## TODOS
-* implement 1:1 and 1:N associations by generating multiple models per input file
+* implement 1:1 and 1:N associations nested deeper than one level
 * implement support for wildcard paths ("./examples/*")
 
 ## Shoutouts:
