@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "format": "eslint ./models --fix",
+    "format": "eslint ./models --fix --warning",
     "test": "node index pokedex ./examples/pokemon.json ./examples/people.json ./examples/narcosEpisodes.json"
   },
   "author": "Sebastian Wiendlocha",

@@ -26,35 +26,33 @@ try {
   throw Error("file does not have the necessary .json file extension");
 }
 
+/**
+ *
+ * @param {String} name - name of model to create
+ * @param {String} path - path to json file containing examples
+ */
 function createModel(name, path) {
   const examples = JSON.parse(fs.readFileSync(path));
 
   console.log(`\nFound ${examples.length} examples for model: ${name}`);
   console.log(`Generating model: ${name}`);
 
-  generateSequelizeModel(name, examples);
+  const associations = generateSequelizeModel(name, examples);
   console.log(`Generated model: ${name}`);
+  return associations;
 }
 
-// start a nice animated progress bar
-const intervalId = startFuse(30, 1, 38);
-
-// create main model
-const associations = {};
-associations[modelName] = createModel(modelName, inputPath);
-
-// create other models from otherInputPaths
-otherInputPaths.forEach((path) => {
-  const inferredModelName = path.split("/")[path.split("/").length - 1].split(".json")[0];
-  associations[inferredModelName] = createModel(inferredModelName, path);
-});
-
+/**
+ * Creates a index.js file containing imports/exports and associations for sequelize models
+ * @param {Object} associations - Object containing association types of models
+ */
 function writeIndexFile(associations) {
-  // create index file for models containing associations
-  let indexTemplate = fs.readFileSync("./models/index.js.tmp").toString();
+  let indexTemplate = fs.readFileSync("./templates/index.js.tmp").toString();
+
   const importStatements = [];
   const modelNames = [];
   const relations = [];
+
   Object.keys(associations).forEach((name) => {
     // create imports
     const importStatement = `const ${name} = require("./${name}")(sequelize, Sequelize);`;
@@ -64,19 +62,39 @@ function writeIndexFile(associations) {
      */
     modelNames.push(name);
   });
-  indexTemplate = indexTemplate.replace("{{imports}}", importStatements.join("\n"));
-  indexTemplate = indexTemplate.replace("{{relations}}", relations.join(""));
-  indexTemplate = indexTemplate.replace("{{modelNames}}", modelNames.join(",\n"));
+
+  // replace "code" in index.js template
+  indexTemplate = indexTemplate.replace("{{imports}}", importStatements.join("\n"))
+    .replace("{{relations}}", relations.join(""))
+    .replace("{{modelNames}}", modelNames.join(",\n"));
+
+  // write file from template
+  if (!fs.existsSync("./models")) {
+    fs.mkdirSync("./models");
+  }
   fs.writeFileSync("./models/index.js", indexTemplate);
 }
 
+// start a nice animated progress bar
+const intervalId = startFuse(30, 1, 38);
+
+// create main model and object containing info about models associations
+const associations = {};
+associations[modelName] = createModel(modelName, inputPath);
+
+// create other models from otherInputPaths
+otherInputPaths.forEach((path) => {
+  const inferredModelName = path.split("/")[path.split("/").length - 1].split(".json")[0];
+  associations[inferredModelName] = createModel(inferredModelName, path);
+});
+
+// write index file after the individual models have been created
 writeIndexFile(associations);
 
 // cleanup generated models by formatting them using eslint
 const eslintProcess = exec("eslint ./models --fix", (error) => {
   if (error) {
-    console.log(error);
-    throw error;
+    console.log("\nEslint errored, theres probably a nested Model with no keys of its own");
   }
 });
 
@@ -85,3 +103,5 @@ eslintProcess.on("exit", () => {
   // stop non-determinate progress bar
   stopFuse(intervalId);
 });
+
+console.log(associations);

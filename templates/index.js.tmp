@@ -2,7 +2,6 @@ const Sequelize = require("sequelize");
 const sequelize = "<YOUR_SEQUELIZE_CONNECTION_GOES_HERE>";
 
 // generated models go here
-// const Operator = require("./operator")(sequelize, Sequelize);
 {{imports}}
 
 // model relations go here

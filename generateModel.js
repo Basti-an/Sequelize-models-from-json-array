@@ -2,7 +2,10 @@ const fs = require("fs");
 
 const { toCamelCase, isInt } = require("./utilities");
 
-function inferDataType(value) {
+// these are more specific sub types which should not be overwritten by generic types
+const specialTypes = ["DataTypes.STRING(\"MAX\")"];
+
+function inferDataType(value, key, associatedModels) {
   if (value === null) {
     return null;
   }
@@ -38,18 +41,34 @@ function inferDataType(value) {
   if (typeof value === "object") {
     // having an object here hints at a structure with associations and therefore
     // should'nt be expressed as a single Sequelize Model
-    // Postgres Sequelize allows for DataTypes.ARRAY but I try to support MSSQL first and foremost
+    if (Array.isArray(value)) {
+      // if the elements are not complex objects, we can STUFF them as a comma separated string
+      if (value[0] && typeof value[0] !== "object") {
+        return "DataTypes.STRING('MAX')";
+      }
+      // we found a 1:n association to another model
+      // so lets save our array as examples and create a model for that later
+      if (!associatedModels[key]) {
+        associatedModels[key] = { name: toCamelCase(key), relation: "1:n", examples: [] };
+      }
+      associatedModels[key].examples.push(...value);
+    } else {
+      // we found a 1:1 association to another model
+      // so lets save the value as an example and create a model for that later
+      if (!associatedModels[key]) {
+        associatedModels[key] = { relation: "1:1", examples: [] };
+      }
+      associatedModels[key].examples.push(value);
+    }
     return "DataTypes.NESTED";
   }
 
   return null;
 }
 
-// these are more specific sub types which should not be overwritten by generic types
-const specialTypes = ["DataTypes.STRING(\"MAX\")"];
-
 function generateSequelizeModel(modelName, examples) {
   const body = {};
+  const associatedModels = [];
 
   examples.forEach((example) => {
     Object.entries(example).forEach(([key, value]) => {
@@ -63,7 +82,7 @@ function generateSequelizeModel(modelName, examples) {
         return;
       }
 
-      const inferredType = inferDataType(value);
+      const inferredType = inferDataType(value, key, associatedModels);
 
       body[camelCasedKey] = {
         type: inferredType || (body[camelCasedKey]
@@ -88,6 +107,7 @@ function generateSequelizeModel(modelName, examples) {
   const payload = JSON.stringify(body, null, 4).replace(/"(DataTypes.*)"/g, "$1");
 
   const template = `
+    ${payload.length === 2 ? "// eslint-disable-next-line no-unused-vars" : ""}
     const ${modelName} = (sequelize, DataTypes) => {
       return sequelize.define(
         "${modelName}",
@@ -103,7 +123,18 @@ function generateSequelizeModel(modelName, examples) {
     fs.mkdirSync("./models");
   }
   fs.writeFileSync(`./models/${modelName}.js`, template);
-  return [];
+
+  Object.entries(associatedModels).forEach(([key, model]) => {
+    // Warning: this generates an endless loop if models have circular references!
+    generateSequelizeModel(toCamelCase(key), model.examples);
+  });
+  return {
+    model: modelName,
+    associations: {
+      "1:n": Object.values(associatedModels).filter((model) => model.relation === "1:n"),
+      "1:1": Object.values(associatedModels).filter((model) => model.relation === "1:1"),
+    },
+  };
 }
 
 module.exports = generateSequelizeModel;
