@@ -141,7 +141,7 @@ function generateSequelizeModel(modelName, examples) {
 
   // return associations, so handling script can write them into a models index.js
   return {
-    model: modelName,
+    model: toCamelCase(modelName),
     associations: {
       "1:n": Object.values(associatedModels).filter((model) => model.relation === "1:n"),
       "1:1": Object.values(associatedModels).filter((model) => model.relation === "1:1"),
