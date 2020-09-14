@@ -135,20 +135,21 @@ function generateSequelizeModel(modelName, examples) {
   }
   fs.writeFileSync(`./models/${modelName}.js`, template);
 
+  const otherModels = [];
   // generate models for associated sub models recursively
   Object.entries(associatedModels).forEach(([key, model]) => {
     // Warning: this generates an endless loop if models have circular references!
-    generateSequelizeModel(toCamelCase(key), model.examples);
+    otherModels.push(...generateSequelizeModel(toCamelCase(key), model.examples));
   });
 
   // return associations, so handling script can write them into a models index.js
-  return {
+  return [{
     model: toCamelCase(modelName),
     associations: {
       "1:n": Object.values(associatedModels).filter((model) => model.relation === "1:n"),
       "1:1": Object.values(associatedModels).filter((model) => model.relation === "1:1"),
     },
-  };
+  }, ...otherModels];
 }
 
 module.exports = generateSequelizeModel;

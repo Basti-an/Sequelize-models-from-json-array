@@ -62,25 +62,29 @@ function writeIndexFile(associations) {
     // create 1:n associations
     model.associations["1:n"].forEach((subModel) => {
       const subModelName = subModel.name;
-      const stmt = `const ${subModelName} = require("./${subModelName}")(sequelize, Sequelize);`;
-      importStatements.push(stmt);
-      modelNames.push(subModelName);
-
       const hasStmt = `${name}.hasMany(${subModelName})`;
       const belongsStmt = `${subModelName}.belongsTo(${name})`;
       relations.push(hasStmt, belongsStmt);
+      if (associations[subModelName]) {
+        return;
+      }
+      const stmt = `const ${subModelName} = require("./${subModelName}")(sequelize, Sequelize);`;
+      importStatements.push(stmt);
+      modelNames.push(subModelName);
     });
 
     // create 1:1 associations
     model.associations["1:1"].forEach((subModel) => {
       const subModelName = subModel.name;
+      const hasStmt = `${name}.hasOne(${subModelName});`;
+      const belongsStmt = `${subModelName}.belongsTo(${name});`;
+      relations.push(hasStmt, belongsStmt);
+      if (associations[subModelName]) {
+        return;
+      }
       const stmt = `const ${subModelName} = require("./${subModelName}")(sequelize, Sequelize);`;
       importStatements.push(stmt);
       modelNames.push(subModelName);
-
-      const hasStmt = `${name}.hasMany(${subModelName});`;
-      const belongsStmt = `${subModelName}.belongsTo(${name});`;
-      relations.push(hasStmt, belongsStmt);
     });
     modelNames.push(name);
   });
@@ -102,12 +106,21 @@ const intervalId = startFuse(30, 1, 38);
 
 // create main model and object containing info about models associations
 const associations = {};
-associations[modelName] = createModel(modelName, inputPath);
+
+const [mainModel, ...otherModels] = createModel(modelName, inputPath);
+associations[modelName] = mainModel;
+otherModels.forEach((model) => {
+  associations[model.model] = model;
+});
 
 // create other models from otherInputPaths
 otherInputPaths.forEach((path) => {
   const inferredModelName = path.split("/")[path.split("/").length - 1].split(".json")[0];
-  associations[inferredModelName] = createModel(inferredModelName, path);
+  const [inferredMainModel, ...inferredOtherModels] = createModel(inferredModelName, path);
+  associations[inferredModelName] = inferredMainModel;
+  inferredOtherModels.forEach((model) => {
+    associations[model.model] = model;
+  });
 });
 
 // write index file after the individual models have been created
