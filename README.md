@@ -1,4 +1,4 @@
-# Create Sequelize Models from JSON-Array
+# Create Sequelize Models from JSON-Array 
 Creates Sequelize model files from JSON files containing example instances of the desired models. 
 Field names and types of the sequelize models will be inferred from the JSON input.
 
@@ -9,10 +9,10 @@ Sometimes you have to import data from a new JSON API to your database and find 
 Writing the sequelize models and their associations by hand would be a bad way to spend your time.
 This small program tries to help you out by looking at your JSON objects and subsequently creates the Sequelize Models and their associations for you automatically!
 
-## Setup
+## Setup 🧶
 `npm i` followed by `npm run test` to verify that a models folder was created containing valid Sequelize model files.
 
-## Creating Models
+## Creating Models 🌱
 In order to run the program, you need to supply at least a model name and a filepath to your JSON file as command line arguments.
 You can also supply more than one JSON file, but the name for those models will be inferred from the JSON file name in that case.
 
@@ -22,7 +22,7 @@ You can also supply more than one JSON file, but the name for those models will 
 ### example with multiple filenames:
 `node index people ./examples/people.json ./examples/narcosEpisodes.json`
 
-## TODOS
+## TODOs 🚧
 * implement support for wildcard paths ("./examples/*") and named command line arguments
 
 ## Shoutouts:
