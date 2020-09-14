@@ -40,17 +40,42 @@ function createModel(name, path) {
 const intervalId = startFuse(30, 1, 38);
 
 // create main model
-createModel(modelName, inputPath);
+const associations = {};
+associations[modelName] = createModel(modelName, inputPath);
 
 // create other models from otherInputPaths
 otherInputPaths.forEach((path) => {
   const inferredModelName = path.split("/")[path.split("/").length - 1].split(".json")[0];
-  createModel(inferredModelName, path);
+  associations[inferredModelName] = createModel(inferredModelName, path);
 });
+
+function writeIndexFile(associations) {
+  // create index file for models containing associations
+  let indexTemplate = fs.readFileSync("./models/index.js.tmp").toString();
+  const importStatements = [];
+  const modelNames = [];
+  const relations = [];
+  Object.keys(associations).forEach((name) => {
+    // create imports
+    const importStatement = `const ${name} = require("./${name}")(sequelize, Sequelize);`;
+    importStatements.push(importStatement);
+    /**
+     * @TODO relations
+     */
+    modelNames.push(name);
+  });
+  indexTemplate = indexTemplate.replace("{{imports}}", importStatements.join("\n"));
+  indexTemplate = indexTemplate.replace("{{relations}}", relations.join(""));
+  indexTemplate = indexTemplate.replace("{{modelNames}}", modelNames.join(",\n"));
+  fs.writeFileSync("./models/index.js", indexTemplate);
+}
+
+writeIndexFile(associations);
 
 // cleanup generated models by formatting them using eslint
 const eslintProcess = exec("eslint ./models --fix", (error) => {
   if (error) {
+    console.log(error);
     throw error;
   }
 });

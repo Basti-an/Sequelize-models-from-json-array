@@ -103,6 +103,7 @@ function generateSequelizeModel(modelName, examples) {
     fs.mkdirSync("./models");
   }
   fs.writeFileSync(`./models/${modelName}.js`, template);
+  return [];
 }
 
 module.exports = generateSequelizeModel;
