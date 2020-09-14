@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index",
     "format": "eslint ./models --fix",
-    "test": "node index cars ./examples/cars.json ./examples/people.json ./examples/pokemon.json ./examples/narcosEpisodes.json"
+    "test": "node index pokedex ./examples/pokemon.json ./examples/people.json ./examples/narcosEpisodes.json"
   },
   "author": "Sebastian Wiendlocha",
   "license": "MIT",
