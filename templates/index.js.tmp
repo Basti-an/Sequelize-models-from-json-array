@@ -7,14 +7,6 @@ const sequelize = "<YOUR_SEQUELIZE_CONNECTION_GOES_HERE>";
 // model relations go here
 {{relations}}
 
-// 1:n
-// testModel.belongsTo(otherModel);
-// otherModel.hasMany(testModel);
-
-// 1:1
-// testModel.belongsTo(otherModel);
-// otherModel.hasOne(testModel);
-
 const models = {
    {{modelNames}}
 };

@@ -54,18 +54,40 @@ function writeIndexFile(associations) {
   const relations = [];
 
   Object.keys(associations).forEach((name) => {
+    const model = associations[name];
     // create imports
     const importStatement = `const ${name} = require("./${name}")(sequelize, Sequelize);`;
     importStatements.push(importStatement);
-    /**
-     * @TODO relations
-     */
+
+    // create 1:n associations
+    model.associations["1:n"].forEach((subModel) => {
+      const subModelName = subModel.name;
+      const stmt = `const ${subModelName} = require("./${subModelName}")(sequelize, Sequelize);`;
+      importStatements.push(stmt);
+      modelNames.push(subModelName);
+
+      const hasStmt = `${name}.hasMany(${subModelName})`;
+      const belongsStmt = `${subModelName}.belongsTo(${name})`;
+      relations.push(hasStmt, belongsStmt);
+    });
+
+    // create 1:1 associations
+    model.associations["1:1"].forEach((subModel) => {
+      const subModelName = subModel.name;
+      const stmt = `const ${subModelName} = require("./${subModelName}")(sequelize, Sequelize);`;
+      importStatements.push(stmt);
+      modelNames.push(subModelName);
+
+      const hasStmt = `${name}.hasMany(${subModelName});`;
+      const belongsStmt = `${subModelName}.belongsTo(${name});`;
+      relations.push(hasStmt, belongsStmt);
+    });
     modelNames.push(name);
   });
 
   // replace "code" in index.js template
   indexTemplate = indexTemplate.replace("{{imports}}", importStatements.join("\n"))
-    .replace("{{relations}}", relations.join(""))
+    .replace("{{relations}}", relations.join("\n"))
     .replace("{{modelNames}}", modelNames.join(",\n"));
 
   // write file from template
@@ -104,5 +126,3 @@ eslintProcess.on("exit", () => {
   // stop non-determinate progress bar
   stopFuse(intervalId);
 });
-
-console.log(associations);

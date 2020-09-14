@@ -63,7 +63,7 @@ function inferDataType(value, key, associatedModels) {
       // we found a 1:1 association to another model
       // so lets save the value as an example and create a model for that later
       if (!associatedModels[key]) {
-        associatedModels[key] = { relation: "1:1", examples: [] };
+        associatedModels[key] = { name: toCamelCase(key), relation: "1:1", examples: [] };
       }
       associatedModels[key].examples.push(value);
     }
