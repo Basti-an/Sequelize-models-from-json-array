@@ -21,6 +21,12 @@ function toCamelCase(key) {
   // this throws index error if key is an empty string, which is ok for our use case
   camel = camel[0].toLowerCase() + camel.slice(1);
 
+  // a json key may start with a numeral, but a js one may not
+  if (!isNaN(camel[0])) {
+    // simply prepend key with some alphabet char
+    camel = `n${camel}`;
+  }
+
   return camel;
 }
 
