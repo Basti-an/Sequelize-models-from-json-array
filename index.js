@@ -38,7 +38,6 @@ function createModel(name, path) {
   console.log(`Generating model: ${name}`);
 
   const associations = generateSequelizeModel(name, examples);
-  console.log(`Generated model: ${name}`);
   return associations;
 }
 

@@ -105,7 +105,6 @@ function generateSequelizeModel(modelName, examples) {
   // delete all keys with nested data, as we have to create associations somewhere else
   Object.entries(body).forEach(([key, value]) => {
     if (value.type === "DataTypes.NESTED") {
-      console.log(`Deleted a key containing nested data: "${key}"`);
       delete body[key];
     }
   });
