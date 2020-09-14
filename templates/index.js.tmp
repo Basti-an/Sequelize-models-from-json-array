@@ -1,0 +1,17 @@
+const Sequelize = require("sequelize");
+const sequelize = "<YOUR_SEQUELIZE_CONNECTION_GOES_HERE>";
+
+// generated models go here
+{{imports}}
+
+// model relations go here
+{{relations}}
+
+const models = {
+   {{modelNames}}
+};
+
+module.exports = {
+  sequelize,
+  models,
+};
