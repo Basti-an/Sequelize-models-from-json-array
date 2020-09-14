@@ -94,12 +94,13 @@ writeIndexFile(associations);
 // cleanup generated models by formatting them using eslint
 const eslintProcess = exec("eslint ./models --fix", (error) => {
   if (error) {
-    console.log("\nEslint errored, theres probably a nested Model with no keys of its own");
+    console.log("\nEslint errored, you might want to check the generated model files");
   }
 });
 
 eslintProcess.on("exit", () => {
   console.log("\nFinished generating Sequelize models.");
+
   // stop non-determinate progress bar
   stopFuse(intervalId);
 });

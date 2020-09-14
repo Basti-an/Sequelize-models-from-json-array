@@ -5,6 +5,13 @@ const { toCamelCase, isInt } = require("./utilities");
 // these are more specific sub types which should not be overwritten by generic types
 const specialTypes = ["DataTypes.STRING(\"MAX\")"];
 
+/**
+ * Tries to infer the data type of a value
+ * if value is an object, we try to classify the object and its relation to the values parent model
+ * @param {*} value - value we are looking at
+ * @param {*} key - key associated with the value, used to create association if value is an object
+ * @param {*} associatedModels - array of associatedModels, to be implicitly changed (bad design)
+ */
 function inferDataType(value, key, associatedModels) {
   if (value === null) {
     return null;
@@ -93,7 +100,7 @@ function generateSequelizeModel(modelName, examples) {
     });
   });
 
-  // delete all keys with nested data, as we cannot support them without associations
+  // delete all keys with nested data, as we have to create associations somewhere else
   Object.entries(body).forEach(([key, value]) => {
     if (value.type === "DataTypes.NESTED") {
       console.log(`Deleted a key containing nested data: "${key}"`);
@@ -119,15 +126,20 @@ function generateSequelizeModel(modelName, examples) {
     };
     module.exports = ${modelName};
   `;
+
+  // write model .js file from template
   if (!fs.existsSync("./models")) {
     fs.mkdirSync("./models");
   }
   fs.writeFileSync(`./models/${modelName}.js`, template);
 
+  // generate models for associated sub models recursively
   Object.entries(associatedModels).forEach(([key, model]) => {
     // Warning: this generates an endless loop if models have circular references!
     generateSequelizeModel(toCamelCase(key), model.examples);
   });
+
+  // return associations, so handling script can write them into a models index.js
   return {
     model: modelName,
     associations: {
