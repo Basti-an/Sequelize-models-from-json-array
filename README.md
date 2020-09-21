@@ -1,7 +1,7 @@
 # Create Sequelize Models from JSON-Array
-![gif showing how sequelize models are created from json input](generateModel.gif)
 Creates Sequelize model files from JSON files containing example instances of the desired models.
 Field names and types of the sequelize models will be inferred from the JSON input.
+![gif showing how sequelize models are created from json input](generateModel.gif)
 
 To see in action what this does exactly, setup the project, take a look at the kantoPokedex.json file in the examples folder and run `npm run test` 🚀
 
