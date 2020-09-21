@@ -1,5 +1,5 @@
 {
-  "name": "generateSequelizeModelFromJsonArray",
+  "name": "sequelize-model-from-json",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
