@@ -1,8 +1,8 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 
-const generateSequelizeModel = require("./generateModel");
-const { startFuse, stopFuse } = require("./fuse");
+const generateSequelizeModel = require("./src/generateModel");
+const { startFuse, stopFuse } = require("./src/fuse");
 
 // process has to be called with at least 2 command line arguments for modelName and inputPath
 if (process.argv.length < 4) {
