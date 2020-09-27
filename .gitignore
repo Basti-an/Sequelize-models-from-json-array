@@ -2,3 +2,4 @@ node_modules
 notes.md
 package-lock.json
 yarn.lock
+.models
