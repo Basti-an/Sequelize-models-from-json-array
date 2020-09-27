@@ -24,6 +24,7 @@ You can also supply more than one JSON file, but the name for those models will 
 
 ## TODOs 🚧
 * implement support for wildcard paths ("./examples/*") and named command line arguments
+* publish to npm for easier distribution
 
 ## Shoutouts:
 * [https://pokeapi.co/](PokeAPI) for amazing pokemon dataset
