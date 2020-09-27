@@ -111,7 +111,7 @@ function generateSequelizeModel(modelName, examples) {
 
   // create pretty printed JSON and replace the stringified types by literals
   // e.g: {"type": "DataTypes.STRING"} => {"type": DataTypes.STRING}
-  // the resulting file should be formatted using Eslint or something similar
+  // the resulting file should be formatted using ESLint or something similar
   const payload = JSON.stringify(body, null, 4).replace(/"(DataTypes.*)"/g, "$1");
 
   const template = `
